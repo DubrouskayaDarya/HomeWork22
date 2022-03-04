@@ -9,9 +9,11 @@ import UIKit
 
 enum Actions: String, CaseIterable {
     case downloadImage = "Download Images"
+    case users = "Users"
 }
 
 private let reuseIdentifier = "CollectionCell"
+private let reuseIdentifier2 = "UsersCell"
 
 class MainCollectionViewController: UICollectionViewController {
 
@@ -23,7 +25,6 @@ class MainCollectionViewController: UICollectionViewController {
     private let actions = Actions.allCases
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
         actions.count
     }
 
@@ -39,7 +40,15 @@ class MainCollectionViewController: UICollectionViewController {
         switch action {
         case .downloadImage:
             performSegue(withIdentifier: "ShowImage", sender: self)
-        default: break
+        case .users:
+            performSegue(withIdentifier: "showUsers", sender: self)
+        }
+
+        func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            if segue.identifier == "showUsers" {
+                let coursesVC = segue.destination as! UsersTableViewController
+                coursesVC.fetchData()
+            }
         }
     }
 }

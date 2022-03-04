@@ -12,7 +12,7 @@ class ImageViewController: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var imageView: UIImageView!
 
-    private let imageUrl = ["https://farm2.staticflickr.com/1949/45717354341_a8dc471d63_b.jpg", "https://papik.pro/uploads/posts/2021-09/1631449929_9-papik-pro-p-krasivie-peizazhi-9.jpg", "https://bipbap.ru/wp-content/uploads/2017/09/50dca6763731640fb4fa59a302daf612.jpg", "https://cs9.pikabu.ru/post_img/big/2017/11/08/5/1510122348150469955.jpg", "https://funart.pro/uploads/posts/2021-03/1617048985_26-p-oboi-krasivie-peizazhi-prirodi-28.jpg"]
+    private let imageUrl = ["https://farm2.staticflickr.com/1949/45717354341_a8dc471d63_b.jpg", "https://123papik.pro/uploads/posts/2021-09/1631449929_9-papik-pro-p-krasivie-peizazhi-9.jpg", "https://bipbap.ru/wp-content/uploads/2017/09/50dca6763731640fb4fa59a302daf612.jpg", "https://cs9.pikabu.ru/post_img/big/2017/11/08/5/1510122348150469955.jpg", "https://funart.pro/uploads/posts/2021-03/1617048985_26-p-oboi-krasivie-peizazhi-prirodi-28.jpg"]
     var timer: Timer?
 
     override func viewDidLoad() {
@@ -32,13 +32,7 @@ class ImageViewController: UIViewController {
                 self.activityIndicator.stopAnimating()
 
                 if let error = error {
-                    let alertVC = UIAlertController(
-                        title: "Error",
-                        message: "Error connecting to the server",
-                        preferredStyle: .alert)
-                    let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-                    alertVC.addAction(action)
-                    self.present(alertVC, animated: true, completion: nil)
+                    self.errorDisplay()
                 }
 
                 if let response = response {
@@ -50,13 +44,7 @@ class ImageViewController: UIViewController {
                 if let data = data, let image = UIImage(data: data) {
                     self.imageView.image = image
                 } else {
-                    let alertVC = UIAlertController(
-                        title: "Error",
-                        message: "Error connecting to the server",
-                        preferredStyle: .alert)
-                    let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-                    alertVC.addAction(action)
-                    self.present(alertVC, animated: true, completion: nil)
+                    self.errorDisplay()
                 }
             }
         }
@@ -68,14 +56,25 @@ class ImageViewController: UIViewController {
         createTimer()
     }
 
-    @objc func updateTimer() {
+    func errorDisplay() {
+        let alertVC = UIAlertController(
+            title: "Error",
+            message: "Error connecting to the server",
+            preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertVC.addAction(action)
+        self.present(alertVC, animated: true, completion: nil)
+    }
+
+    @objc func updateImage() {
         fetchImage()
     }
+
     func createTimer() {
         if timer == nil {
             timer = Timer.scheduledTimer(timeInterval: 3.0,
                 target: self,
-                selector: #selector(updateTimer),
+                selector: #selector(updateImage),
                 userInfo: nil,
                 repeats: true)
         }
